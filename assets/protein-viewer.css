@@ -13,7 +13,7 @@ body:has(.protein-stencil) { isolation: isolate; }
 .protein-stage {
   position: absolute;
   inset: 0;
-  opacity: .3;
+  opacity: var(--protein-opacity);
   mask-image: linear-gradient(to right, transparent, #000 28%);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 28%);
 }
@@ -32,8 +32,8 @@ body:has(.protein-stencil) { isolation: isolate; }
 .protein-ready .protein-fallback { visibility: hidden; }
 .protein-credit { color: var(--muted); }
 @media (max-width: 800px) {
-  .protein-stage { opacity: .23; }
+  .protein-stage { opacity: calc(var(--protein-opacity) * .77); }
 }
 @media (max-width: 540px) {
-  .protein-stage { opacity: .16; }
+  .protein-stage { opacity: calc(var(--protein-opacity) * .53); }
 }

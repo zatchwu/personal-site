@@ -16,12 +16,15 @@ Open <http://127.0.0.1:8000/>. Stop the server with Ctrl-C. Use an HTTP server i
 
 - `index.html`: About Me introduction (the paragraphs in `.intro-copy`), publications, and headshot markup.
 - `assets/style.css`: shared layout, typography, colors, and mobile styles.
+- `assets/theme.js`: applies the system color preference or a saved light/dark choice before the page paints, and powers the navigation toggle.
 - `assets/favicon-coral.png` and `favicon.ico`: transparent coral, deep blue, and slate gray protein favicon. The ICO contains 16, 32, and 48 pixel versions; both pages and the post template link to these assets.
 - `blog/index.html`: blog index, currently empty and unlinked from the homepage.
 - `templates/post.html.txt`: reusable HTML post template; not a published post.
 - `CNAME`: custom domain, `zvxywu.com`.
 
 The introduction is plain HTML, so it shows up without JavaScript and in link previews. Each publication is an `article.paper`, grouped by year. Optional notes such as “Preprint” or “Core Contributor” go in a `<span class="tag">` after the venue. Titles link to the papers; citation PDFs are not mirrored here. The source CV itself is not included in the public site.
+
+The site follows the browser's light/dark preference until a visitor uses the sun/moon button in the navigation. Their choice is stored locally under `zvxywu-theme` and shared across pages and tabs. With JavaScript disabled, CSS still follows the system preference and the toggle is hidden. The protein backdrop uses lower opacity in dark mode.
 
 The headshot uses `assets/headshot.webp`, generated from `assets/zach_raven.jpg` at 432 × 334 with Lanczos downsampling and a light Gaussian blur (radius 0.2). `assets/headshot.jpg` is the same small, smoothed photo for link previews (`og:image`), because some sites don't accept WebP; replace both together. Both optimized copies have embedded metadata removed. The full landscape frame displays at 216px wide with automatic height, beside the introduction on larger screens and above it at widths of 640px or less.
 
