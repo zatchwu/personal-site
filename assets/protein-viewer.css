@@ -1,0 +1,39 @@
+/* Decorative backdrop: outside document flow, behind text, never catches input. */
+body:has(.protein-stencil) { isolation: isolate; }
+.protein-stencil {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: 38.2%; /* The smaller part of a golden-section division of the page. */
+  margin: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.protein-stencil + .page { position: relative; z-index: 1; }
+.protein-stage {
+  position: absolute;
+  inset: 0;
+  opacity: .3;
+  mask-image: linear-gradient(to right, transparent, #000 28%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 28%);
+}
+.protein-stage canvas { display: block; width: 100%; height: 100%; }
+.protein-fallback {
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  left: 55%;
+  transform: translateX(-55%);
+}
+.protein-stage canvas { position: absolute; inset: 0; opacity: 0; }
+.protein-ready canvas { opacity: 1; }
+.protein-ready .protein-fallback { visibility: hidden; }
+.protein-credit { color: var(--muted); }
+@media (max-width: 800px) {
+  .protein-stage { opacity: .23; }
+}
+@media (max-width: 540px) {
+  .protein-stage { opacity: .16; }
+}

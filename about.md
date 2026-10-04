@@ -1,0 +1,5 @@
+I am currently a Staff Research Scientist at Google DeepMind, working on methods to identify, design, and improve proteins. Here, I have been fortunate to work with wonderful colleagues and collaborators on a number of projects, such as AlphaFold for protein complex prediction and AlphaProteo for protein design. Before this, I was a graduate student in Frances Arnold's research group at the California Institute of Technology, where I co-established the machine learning subgroup. Prior to this, I did my undergraduate research at Cornell University with Matthew DeLisa.
+
+And before that, I grew up in a small Texas town and spent a significant part of my childhood practicing piano and cello. My favorite composers are Bach, Beethoven, and Tchaikovsky.
+
+If you'd like to drop a message, I am pretty responsive on twitter [(zvxywu@)](https://x.com/zvxywu), and slightly slower on [linkedin](https://www.linkedin.com/feed/).
