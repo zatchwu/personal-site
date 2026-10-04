@@ -16,6 +16,7 @@ Open <http://127.0.0.1:8000/>. Stop the server with Ctrl-C. Use an HTTP server i
 
 - `index.html`: About Me introduction (the paragraphs in `.intro-copy`), publications, and headshot markup.
 - `assets/style.css`: shared layout, typography, colors, and mobile styles.
+- `assets/favicon-coral.png` and `favicon.ico`: transparent coral, deep blue, and slate gray protein favicon. The ICO contains 16, 32, and 48 pixel versions; both pages and the post template link to these assets.
 - `blog/index.html`: blog index, currently empty and unlinked from the homepage.
 - `templates/post.html.txt`: reusable HTML post template; not a published post.
 - `CNAME`: custom domain, `zvxywu.com`.
