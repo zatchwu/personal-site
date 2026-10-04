@@ -1,6 +1,6 @@
 // Generated from src/protein-viewer.ts with node scripts/build-protein.mjs.
 // Lightweight, scroll-driven 5UCW stencil. Geometry is also used for the SVG fallback.
-import { makeGeometry, scene, PROTEIN_OPACITY, IRON_COLORS,            } from './protein-geometry.js?v=cartoon-1';
+import { makeGeometry, scene, PROTEIN_OPACITY, IRON_COLORS,            } from './protein-geometry.js';
 async function mount(figure             )                {
   const canvas=figure.querySelector                   ('canvas') ;
   const context=canvas.getContext('2d');
@@ -30,17 +30,16 @@ async function mount(figure             )                {
     function draw()       {
       context .setTransform(density,0,0,density,0,0);context .clearRect(0,0,width,height);
       proteinContext .setTransform(density,0,0,density,0,0);proteinContext .clearRect(0,0,width,height);
-      const frame=scene(model,width,height,current);
-      paint(proteinContext ,frame.protein);
+      const layers=scene(model,width,height,current);
+      paint(proteinContext ,layers.protein);
       context .globalAlpha=PROTEIN_OPACITY;
       context .drawImage(proteinCanvas,0,0,width,height);
       context .globalAlpha=1;
-      paint(context ,frame.heme);
-      const [x,y]=frame.iron.center,r=frame.iron.radius;
+      paint(context ,layers.heme);
+      const [x,y]=layers.iron.center,r=layers.iron.radius;
       const highlight=context .createRadialGradient(x-r*.3,y-r*.35,r*.08,x,y,r);
       highlight.addColorStop(0,IRON_COLORS[0]);highlight.addColorStop(.52,IRON_COLORS[1]);highlight.addColorStop(1,IRON_COLORS[2]);
       context .beginPath();context .arc(x,y,r,0,Math.PI*2);context .fillStyle=highlight;context .fill();
-      figure.dataset.rotation=current.toFixed(4);
     }
     function tick(now       )      {
       frame=0;

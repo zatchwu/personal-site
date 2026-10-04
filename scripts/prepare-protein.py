@@ -3,7 +3,6 @@
 
 Run from any directory: python3 scripts/prepare-protein.py
 To refresh the original coordinates: python3 scripts/prepare-protein.py --download
-To rebuild the earlier 6CUN option: python3 scripts/prepare-protein.py --pdb 6CUN
 The browser loads the generated JSON only, never the full archival PDB file.
 """
 
@@ -22,11 +21,6 @@ MODELS = {
         "name": "Cytochrome P411 P-4 A82L A78V F263L amination catalyst, monomer A",
         "ligands": ("HEM",), "residues": 453,
         "segments": [(1, 381), (384, 455)], "ligandCounts": [("HEM", 43)],
-    },
-    "6CUN": {
-        "name": "Engineered Rhodothermus marinus cytochrome c (Rma TDE)",
-        "ligands": ("HEC", "CA1"), "residues": 112,
-        "segments": [(9, 99), (103, 123)], "ligandCounts": [("HEC", 43), ("CA1", 7)],
     },
 }
 
@@ -68,88 +62,6 @@ def select_conformer(atoms):
     return sorted(by_name.values(), key=lambda atom: atom["serial"])
 
 
-def write_svg(model, destination):
-    """Orthographic flat ribbon fallback, oriented by deposited carbonyl atoms."""
-    def project(point):
-        x, y, z = point
-        # Fixed, rigid rotations; the scientific coordinates are not deformed.
-        for axis, angle in (("y", 0.62), ("x", -0.38), ("z", 0.12)):
-            c, s = math.cos(angle), math.sin(angle)
-            if axis == "y":
-                x, z = x * c + z * s, -x * s + z * c
-            elif axis == "x":
-                y, z = y * c - z * s, y * s + z * c
-            else:
-                x, y = x * c - y * s, x * s + y * c
-        return x, -y, z
-
-    def subtract(a, b):
-        return [x - y for x, y in zip(a, b)]
-
-    def dot(a, b):
-        return sum(x * y for x, y in zip(a, b))
-
-    def unit(a):
-        magnitude = math.sqrt(dot(a, a))
-        return [v / magnitude for v in a] if magnitude > 1e-8 else [1, 0, 0]
-
-    ribbons = []
-    for chain in model["chains"]:
-        residues = chain["residues"]
-        edges = []
-        previous_side = None
-        for index, residue in enumerate(residues):
-            tangent = unit(subtract(residues[min(index + 1, len(residues) - 1)]["p"], residues[max(0, index - 1)]["p"]))
-            carbonyl = subtract(residue.get("o", residue["p"]), residue.get("c", residue["p"]))
-            # Project C→O into the plane perpendicular to the backbone tangent.
-            side = unit([carbonyl[i] - dot(carbonyl, tangent) * tangent[i] for i in range(3)])
-            if previous_side is not None and dot(side, previous_side) < 0:
-                side = [-v for v in side]
-            previous_side = side
-            half_width = 1.75 if residue["ss"] == "H" else 2.1 if residue["ss"] == "E" else .35
-            edges.append([
-                [residue["p"][i] - side[i] * half_width for i in range(3)],
-                [residue["p"][i] + side[i] * half_width for i in range(3)],
-            ])
-        for (left1, right1), (left2, right2) in zip(edges, edges[1:]):
-            ribbons.append([project(point) for point in (left1, right1, right2, left2)])
-    ligands = [[project(atom["p"]) for atom in ligand["atoms"]] for ligand in model["ligands"]]
-    points = [point for trace in ribbons + ligands for point in trace]
-    lo = [min(point[axis] for point in points) for axis in range(3)]
-    hi = [max(point[axis] for point in points) for axis in range(3)]
-    scale = min(528 / (hi[0] - lo[0]), 388 / (hi[1] - lo[1]))
-
-    def xy(point):
-        return [(point[0] - (lo[0] + hi[0]) / 2) * scale + 280,
-                (point[1] - (lo[1] + hi[1]) / 2) * scale + 210]
-
-    elements = []
-
-    def line(a, b, color, width, opacity):
-        x1, y1 = xy(a)
-        x2, y2 = xy(b)
-        markup = f'<path d="M{x1:.2f},{y1:.2f}L{x2:.2f},{y2:.2f}" stroke="{color}" stroke-width="{width}" opacity="{opacity:.2f}"/>'
-        elements.append(((a[2] + b[2]) / 2, markup))
-
-    for corners in ribbons:
-        depth = sum(point[2] for point in corners) / len(corners)
-        lightness = round(58 + (depth - lo[2]) / (hi[2] - lo[2]) * 20)
-        polygon = " ".join(f"{xy(point)[0]:.2f},{xy(point)[1]:.2f}" for point in corners)
-        elements.append((depth, f'<polygon points="{polygon}" fill="hsl(191,17%,{lightness}%)"/>'))
-    for ligand, projected in zip(model["ligands"], ligands):
-        for a, b in ligand["bonds"]:
-            line(projected[a], projected[b], "#9c755c", 3.6, 1)
-        for atom, point in zip(ligand["atoms"], projected):
-            if atom["e"] in ("FE", "O", "N"):
-                x, y = xy(point)
-                radius = 4.2 if atom["e"] == "FE" else 1.7
-                color = {"FE": "#ad6535", "O": "#bd8770", "N": "#876e77"}[atom["e"]]
-                elements.append((point[2], f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{radius}" fill="{color}"/>'))
-    body = "".join(element for _, element in sorted(elements, key=lambda item: item[0]))
-    destination.write_text('<svg xmlns="http://www.w3.org/2000/svg" width="560" height="420" viewBox="0 0 560 420" fill="none" stroke-linecap="round" stroke-linejoin="round">'
-                           f'<title>{model["id"]}, monomer A, flat backbone ribbon and heme</title>' + body + '</svg>\n')
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--download", action="store_true")
@@ -158,7 +70,6 @@ def main():
     config = MODELS[args.pdb]
     source = ROOT / f"assets/protein/source/{args.pdb}.pdb"
     output = ROOT / f"assets/protein/{args.pdb.lower()}.json"
-    fallback = ROOT / f"assets/protein/{args.pdb.lower()}.svg"
     url = f"https://files.rcsb.org/download/{args.pdb}.pdb"
     if args.download or not source.exists():
         source.parent.mkdir(parents=True, exist_ok=True)
@@ -258,10 +169,7 @@ def main():
         "ligands": ligands,
     }
     output.write_text(json.dumps(model, separators=(",", ":")) + "\n")
-    if args.pdb == "6CUN":
-        write_svg(model, fallback)
-    else:
-        print("Run node scripts/build-protein.mjs to rebuild the shared-camera SVG fallback.")
+    print("Run node scripts/build-protein.mjs to rebuild the shared-camera SVG fallback.")
     print(f"Wrote {output.relative_to(ROOT)} ({output.stat().st_size:,} bytes)")
     print(f"{len(backbone)} C-alpha atoms, {len(chains)} trace segments")
     for ligand in ligands:

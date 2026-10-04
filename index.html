@@ -8,23 +8,29 @@
   <title>Zachary Wu</title>
   <meta name="description" content="Zachary Wu's research in AI protein design, protein engineering, and machine learning.">
   <link rel="canonical" href="https://zvxywu.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Zachary Wu">
+  <meta property="og:description" content="Zachary Wu's research in AI protein design, protein engineering, and machine learning.">
+  <meta property="og:url" content="https://zvxywu.com/">
+  <meta property="og:image" content="https://zvxywu.com/assets/headshot.jpg">
+  <meta property="og:image:alt" content="Zachary Wu">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/style.css?v=about-markdown-1">
-  <link rel="stylesheet" href="/assets/protein-viewer.css?v=cartoon-1">
-  <script type="module" src="/assets/protein-viewer.js?v=cartoon-1"></script>
-  <script type="module" src="/assets/about.js?v=security-1"></script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/protein-viewer.css">
+  <script type="module" src="/assets/protein-viewer.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <figure class="protein-stencil" aria-hidden="true">
-          <div class="protein-stage">
-            <img class="protein-fallback" src="/assets/protein/5ucw.svg?v=cartoon-1" width="1500" height="1000" alt="">
-            <canvas></canvas>
-          </div>
-        </figure>
+    <div class="protein-stage">
+      <img class="protein-fallback" src="/assets/protein/5ucw.svg" width="1500" height="1000" alt="">
+      <canvas></canvas>
+    </div>
+  </figure>
   <div class="page">
     <header class="site-header">
-      <a class="site-name" href="/" aria-current="page">Zachary Wu</a>
+      <h1 class="site-title"><a class="site-name" href="/" aria-current="page">Zachary Wu</a></h1>
       <nav aria-label="Main navigation">
         <a href="#about">About Me</a>
         <a href="#papers">Papers</a>
@@ -33,16 +39,18 @@
 
     <main id="main">
       <section id="about" class="intro" aria-label="About Me">
-        <div class="intro-copy" data-markdown="/about.md">
-          <!-- INTRO: Edit about.md. These paragraphs are the no-JavaScript fallback. -->
+        <div class="intro-copy">
+          <p>I am currently a Staff Research Scientist at Google DeepMind, working on methods to identify, design, and improve proteins. Here, I have been fortunate to work with wonderful colleagues and collaborators on a number of projects, such as AlphaFold for protein complex prediction and AlphaProteo for protein design. Before this, I was a graduate student in Frances Arnold’s research group at the California Institute of Technology, where I co-established the machine learning subgroup. Prior to this, I did my undergraduate research at Cornell University with Matthew DeLisa.</p>
+          <p>And before that, I grew up in a small Texas town and spent a significant part of my childhood practicing piano and cello. My favorite composers are Bach, Beethoven, and Tchaikovsky.</p>
+          <p>If you’d like to drop a message, I am pretty responsive on twitter (<a href="https://x.com/zvxywu">@zvxywu</a>), and slightly slower on <a href="https://www.linkedin.com/in/zachary-wu-43b47b58/">linkedin</a>.</p>
         </div>
-        <img class="headshot" src="/assets/headshot.webp?v=medium-1" width="144" height="144" alt="Zachary Wu" decoding="async">
+        <img class="headshot" src="/assets/headshot.webp" width="432" height="334" alt="Zachary Wu with a raven" decoding="async">
       </section>
 
       <section id="papers" aria-labelledby="papers-title">
         <div class="section-heading">
           <h2 id="papers-title">Papers</h2>
-          <span class="section-note">Research &amp; reviews</span>
+          <a class="section-link" href="https://scholar.google.com/citations?user=2QhtVlkAAAAJ&amp;hl=en">Google Scholar</a>
         </div>
 
         <div class="year-group">
@@ -51,7 +59,7 @@
             <article class="paper">
               <h4><a href="https://doi.org/10.1038/s41586-024-07487-w">Accurate structure prediction of biomolecular interactions with AlphaFold 3</a></h4>
               <p class="authors">J. Abramson, J. Adler, …, <strong>Z. Wu</strong>, et al.</p>
-              <p class="venue">Nature 630, 493–500 <span class="contribution">Core Contributor</span></p>
+              <p class="venue">Nature 630, 493–500 <span class="tag">Core Contributor</span></p>
             </article>
             <article class="paper">
               <h4><a href="https://arxiv.org/abs/2409.08022">De novo design of high-affinity protein binders with AlphaProteo</a></h4>
@@ -67,7 +75,7 @@
             <article class="paper">
               <h4><a href="https://arxiv.org/abs/2305.16634">Machine learning for protein engineering</a></h4>
               <p class="authors">K. E. Johnston, C. Fannjiang, B. J. Wittmann, B. L. Hie, K. K. Yang, <strong>Z. Wu</strong></p>
-              <p class="venue">Machine Learning in Molecular Sciences, 277–311 <span class="contribution">Corresponding Author</span></p>
+              <p class="venue">Machine Learning in Molecular Sciences, 277–311 <span class="tag">Corresponding Author</span></p>
             </article>
           </div>
         </div>
@@ -140,7 +148,6 @@
 
     <footer class="site-footer">
       <a class="protein-credit" href="https://www.rcsb.org/structure/5UCW" title="Background: PDB 5UCW, monomer A">5UCW · chain A</a>
-      <span>Zachary Wu</span>
       <!-- Restore when the first post is ready: <a href="/blog/">Occasional writing</a> -->
     </footer>
   </div>

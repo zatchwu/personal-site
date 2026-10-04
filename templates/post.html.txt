@@ -8,8 +8,15 @@
   <title>POST TITLE — Zachary Wu</title>
   <meta name="description" content="ONE-SENTENCE SUMMARY">
   <link rel="canonical" href="https://zvxywu.com/blog/POST-SLUG/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="POST TITLE">
+  <meta property="og:description" content="ONE-SENTENCE SUMMARY">
+  <meta property="og:url" content="https://zvxywu.com/blog/POST-SLUG/">
+  <meta property="og:image" content="https://zvxywu.com/assets/headshot.jpg">
+  <meta property="og:image:alt" content="Zachary Wu">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/style.css?v=compact-1">
+  <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -29,7 +36,7 @@
         <p>Your next paragraph.</p>
       </article>
     </main>
-    <footer class="site-footer"><span>Zachary Wu</span><a href="/blog/">All posts</a></footer>
+    <footer class="site-footer"><a href="/blog/">All posts</a></footer>
   </div>
 </body>
 </html>

@@ -76,69 +76,12 @@ python3 scripts/prepare-protein.py --download
 node scripts/build-protein.mjs
 ```
 
-The JSON schema below also applies to 5UCW, with `id: '5UCW'`, ligand
-`name: 'HEM'`, and residue fields `c: Point; o: Point` added for ribbon geometry.
-
-## Earlier model: 6CUN (preserved)
-
-Source: [RCSB PDB 6CUN](https://www.rcsb.org/structure/6CUN),
-[original PDB coordinates](https://files.rcsb.org/download/6CUN.pdb),
-[structure DOI](https://doi.org/10.2210/pdb6CUN/pdb).
-
-The structure is engineered *Rhodothermus marinus* cytochrome c (Rma TDE),
-bound to a carbene intermediate, determined by X-ray diffraction at 1.29 Å.
-Its primary publication is Lewis et al., 2018,
-[“Catalytic iron-carbene intermediate revealed in a cytochrome c carbene transferase”](https://doi.org/10.1073/pnas.1807027115).
-
-`source/6CUN.pdb` is the unmodified RCSB download. It is kept as a reproducible
-source artifact and is **not loaded by the website**. `6cun.json` is the 8 KB
-display model. `6cun.svg` is a transparent, static fallback derived from the
-same coordinates. No remote API or molecular-viewer library is needed at runtime.
-
-Rebuild with Python's standard library:
-
-```sh
-python3 scripts/prepare-protein.py --pdb 6CUN
-# Optional: refresh the original source from RCSB before rebuilding.
-python3 scripts/prepare-protein.py --pdb 6CUN --download
-```
-
-## Model and simplifications
-
-- Chain A has 123 deposited residues and **112 modeled residues**. Only its
-  C-alpha atoms are included in the display trace. The absent residues are
-  A2–8, A100–102, and A124; no coordinates are invented for them.
-- The trace is split into A9–99 (91 points) and A103–123 (21 points), preserving
-  the internal gap. Render each `chains` entry independently. Entries share
-  the real chain ID `A` and have distinct `segment` values.
-- `ss` is `H` for residues covered by one of the PDB's eight HELIX records,
-  `E` for SHEET, and `C` otherwise. There are no SHEET records in this structure.
-- **HEC is heme C**, with all 43 modeled non-hydrogen atoms and 50 internal
-  CONECT edges. **CA1** contains all seven modeled non-hydrogen atoms and six
-  internal CONECT edges. Its PDB chemical-component name is “ETHYL PROPIONATE”;
-  the deposited structure title and paper describe the bound carbene intermediate.
-- Bonds are copied from PDB CONECT records, deduplicated and indexed into the
-  corresponding ligand's atom array. They are connectivity edges, with no bond
-  orders. No bonds are inferred by distance. Protein–heme links are omitted
-  because side chains are omitted; the deposited CONECT records do not provide
-  a heme–CA1 edge, so none is invented.
-- All coordinates are translated by the C-alpha centroid (saved as `origin`)
-  and rounded to 0.001 Å. Axes, chirality, scale, and relative positions are
-  preserved; no PCA or other rotation is applied to the JSON.
-- For each residue, shared atoms and altloc A are selected consistently; if A
-  is absent, the highest-total-occupancy conformer is used. The exported C-alpha
-  and ligand atoms in the present 6CUN file have no alternate conformers.
-- Solvent, hydrogens, protein side chains, and crystal-symmetry mates are omitted.
-- The SVG uses rigid rotations, orthographic projection, depth-sorted C-alpha
-  trace segments and ligand bonds. It is a simplified scientific visualization,
-  not an atomic surface or a simulated molecular trajectory.
-
 ## JSON schema
 
 ```ts
 type Point = [number, number, number];
 type Model = {
-  id: '6CUN';
+  id: '5UCW';
   source: string;
   name: string;
   units: 'angstrom';
@@ -148,10 +91,17 @@ type Model = {
   chains: {
     id: 'A';
     segment: number;
-    residues: { n: number; i?: string; p: Point; ss: 'H' | 'E' | 'C' }[];
+    residues: {
+      n: number;
+      i?: string; // insertion code, when present
+      p: Point; // C-alpha
+      c?: Point; // carbonyl C; present for all 5UCW residues
+      o?: Point; // carbonyl O; present for all 5UCW residues
+      ss: 'H' | 'E' | 'C';
+    }[];
   }[];
   ligands: {
-    name: 'HEC' | 'CA1';
+    name: 'HEM';
     chain: 'A';
     n: number;
     atoms: { p: Point; e: string; name: string }[];
